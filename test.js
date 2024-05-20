@@ -124,6 +124,7 @@ async function searchOnFlipkart() {
         Link_to_Product_Details_Page: await links[i].getAttribute('href'),
       });
     }
+    //temp
 
     // printing arr
     for (let i = 0; i < arr.length; i++) {
