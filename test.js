@@ -1,8 +1,30 @@
 const { Builder, By, Key, until } = require('selenium-webdriver');
+const browserstack = require('browserstack-local');
+
+const USERNAME = 'vishaldhangar_MVXOTJ';
+const ACCESS_KEY = 'M4QzmCzqN1qppABC214s';
+
+const capabilities = {
+  'bstack:options': {
+    os: 'Windows',
+    osVersion: '10',
+    local: 'false',
+    seleniumVersion: '3.14.0',
+    userName: USERNAME,
+    accessKey: ACCESS_KEY,
+  },
+  browserName: 'Chrome',
+  browserVersion: 'latest',
+};
 
 async function searchOnFlipkart() {
   // Initialize Chrome WebDriver
-  let driver = await new Builder().forBrowser('chrome').build();
+  let driver = await new Builder()
+    .usingServer(
+      `https://${USERNAME}:${ACCESS_KEY}@hub-cloud.browserstack.com/wd/hub`
+    )
+    .withCapabilities(capabilities)
+    .build();
   try {
     // Open Flipkart website
     await driver.get('https://www.flipkart.com/');
@@ -22,6 +44,34 @@ async function searchOnFlipkart() {
     await driver
       .wait(until.elementLocated(By.linkText('Mobiles')), 10000)
       .click();
+    // click dropdown
+    let dropdown = await driver.wait(
+      until.elementLocated(
+        By.xpath(
+          '//div[@class="fxf7w6 rgHxCQ" and contains(text(), "Brand")][1]'
+        )
+      ),
+      10000
+    );
+
+    // Click on the dropdown
+
+    // check whether dropdown is open or not
+    let dropdownOpen = await dropdown.isDisplayed();
+    if (!dropdownOpen) {
+      // click on dropdown
+      await dropdown.click();
+    }
+
+    // brands checkbox
+    let brand = await driver.wait(
+      until.elementLocated(
+        By.xpath('//label[@class="tJjCVx _3DvUAf"]/div[text()="SAMSUNG"]')
+      ),
+      10000
+    );
+    // await driver.executeScript('arguments[0].scrollIntoView()', brand);
+    await brand.click();
 
     // click on flipkar assured
     let input = await driver.wait(

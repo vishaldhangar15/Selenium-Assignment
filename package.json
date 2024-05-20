@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "browserstack-local": "^1.5.5",
     "chromedriver": "^125.0.0",
     "selenium-webdriver": "^4.21.0"
   }
